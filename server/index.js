@@ -1,5 +1,5 @@
 require("dotenv").config({ path: __dirname + "/.env" });
-import express from 'express';
+const express = require('express');
 
 const app = express();
 
@@ -12,5 +12,5 @@ app.get("/", (req, res) => {
   });
 
 app.listen(PORT, () => {
-    console.log(`Server listening on the port  ${3000}`);
+    console.log(`Server listening on the port  ${PORT}`);
 })
