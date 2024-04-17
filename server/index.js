@@ -1,16 +1,17 @@
-require("dotenv").config({ path: __dirname + "/.env" });
 const express = require('express');
+const cors = require('cors')
+require("dotenv").config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 9000;
+// middleware
+app.use(cors());
+app.use(express.json())
 
-//Here you can add your routes
-//Here's an example
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-  });
+// ROUTES
+
 
 app.listen(PORT, () => {
-    console.log(`Server listening on the port  ${PORT}`);
+    console.log(`Server listening on the port ${PORT}`);
 })
