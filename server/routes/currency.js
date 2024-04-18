@@ -5,23 +5,23 @@ const {
     getCurrencyPair,
     deleteCurrencyPair,
     updateCurrencyPair
-} = require('../controllers/currencyController')
+} = require('../controllers/currencyController');
 
-const router = express.Router()
+const router = express.Router();
 
 // Create pair
-router.post('/', createCurrencyPair)
+router.post('/:currency_A/:currency_B/:rate', createCurrencyPair);
 
 // Get all pair
-router.get('/', getAllCurrencyPairs)
+router.get('/', getAllCurrencyPairs);
 
 // Get a pair
-router.get('/:id', getCurrencyPair)
+router.get('/:currency_A/:currency_B', getCurrencyPair);
 
 // Delete a pair
-router.delete('/:id', deleteCurrencyPair)
+router.delete('/:currency_A/:currency_B', deleteCurrencyPair);
 
 // Update a pair
-router.patch('/:id', updateCurrencyPair)
+router.patch('/:currency_A/:currency_B/:rate', updateCurrencyPair);
 
-module.exports = router
+module.exports = router;
