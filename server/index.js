@@ -1,8 +1,9 @@
 require("dotenv").config();
 
 const express = require('express');
+const client = require('./db');
 const cors = require('cors');
-const currencyRoutes = require('./routes/currency')
+const currencyRoutes = require('./routes/currency');
 
 
 const app = express();
@@ -18,7 +19,6 @@ app.use((req, res, next) => {
 
 // ROUTES
 app.use('/', currencyRoutes)
-
 
 app.listen(PORT, () => {
     console.log(`Server listening on the port ${PORT}`);
