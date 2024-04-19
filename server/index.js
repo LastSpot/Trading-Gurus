@@ -1,10 +1,8 @@
 require("dotenv").config();
 
 const express = require('express');
-const client = require('./db');
 const cors = require('cors');
 const currencyRoutes = require('./routes/currency');
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
