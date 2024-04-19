@@ -10,18 +10,18 @@ const {
 const router = express.Router();
 
 // Create pair
-router.post('/:currency_A/:currency_B/:rate', createCurrencyPair);
+router.post('/', createCurrencyPair);
 
 // Get all pair
 router.get('/', getAllCurrencyPairs);
 
 // Get a pair
-router.get('/:currency_A/:currency_B', getCurrencyPair);
+router.get('/:id', getCurrencyPair);
 
 // Delete a pair
-router.delete('/:currency_A/:currency_B', deleteCurrencyPair);
+router.delete('/:id', deleteCurrencyPair);
 
 // Update a pair
-router.patch('/:currency_A/:currency_B/:rate', updateCurrencyPair);
+router.patch('/:id', updateCurrencyPair);
 
 module.exports = router;

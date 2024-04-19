@@ -13,7 +13,7 @@ client.connect((err) => {
     if (err) {
         console.err('Connection error:', err.stack)
     } else {
-        console.log('Connected.')
+        console.log('Connected to server.')
     }
 })
 

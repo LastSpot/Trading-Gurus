@@ -5,10 +5,12 @@ require("dotenv").config();
 const createCurrencyPair = async (req, res) => {
     const { currency_A, currency_B, rate } = req.body;
 
-    const sql = `INSERT INTO ${process.env.table} (currency_A, currency_B, rate) VALUES($1,$2,$3);`;
+    const pairCode = currency_A + currency_B;
+
+    const sql = `INSERT INTO ${process.env.table} VALUES($1, $2, $3, $4);`;
 
     try {
-        await client.query(sql, [currency_A, currency_B, rate]);
+        await client.query(sql, [pairCode, currency_A, currency_B, rate]);
         res.status(201).json({mssg: 'Successfully created a pair of currency'});
     } catch (error) {
         res.status(500).json({error: error.message});
@@ -30,13 +32,16 @@ const getAllCurrencyPairs = async (req, res) => {
 
 // Get a pair
 const getCurrencyPair = async (req, res) => {
-    const { currency_A, currency_B } = req.params; 
+    const { id } = req.params; 
 
-    const sql = `SELECT * FROM ${process.env.table} WHERE currency_A = ? AND currency_B = ?;`;
+    const sql = `SELECT * FROM ${process.env.table} WHERE code = $1;`;
 
     try {
-        const currencyPair = await client.query(sql, [currency_A, currency_B]);
-        const content = currencyPair.rows
+        const currencyPair = await client.query(sql, [id]);
+        const content = currencyPair.rows;
+        if (!content) {
+            return res.status(404).json({mssg: 'No such currency pair'})
+        }
         res.status(200).json(content);
     } catch (error) {
         res.status(404).json({mssg: 'No such currency pair'});
@@ -45,14 +50,13 @@ const getCurrencyPair = async (req, res) => {
 
 // Delete a pair
 const deleteCurrencyPair = async (req, res) => {
-    const { currency_A, currency_B } = req.params; 
+    const { id } = req.params; 
 
-    const sql = `DELETE FROM ${process.env.table} WHERE currency_A = ? AND currency_B = ?;`;
+    const sql = `DELETE FROM ${process.env.table} WHERE code = $1;`;
 
     try {
-        const currencyPair = await client.query(sql, [currency_A, currency_B]);
-        const content = currencyPair.rows;
-        res.status(200).json(content);
+        const currencyPair = await client.query(sql, [id]);
+        res.status(200).json({mssg: 'Successfully delete currency pair'});
     } catch (error) {
         res.status(404).json({mssg: 'No such currency pair'});
     }
@@ -60,14 +64,14 @@ const deleteCurrencyPair = async (req, res) => {
 
 // Update a pair
 const updateCurrencyPair = async (req, res) => {
-    const { currency_A, currency_B, rate } = req.params; 
+    const { id } = req.params;
+    const{ rate } = req.body;
 
-    const sql = `UPDATE ${process.env.table} SET rate = ? WHERE currency_A = ? AND currency_B = ?;`;
+    const sql = `UPDATE ${process.env.table} SET rate = $1 WHERE code = $2;`;
 
     try {
-        const currencyPair = await client.query(sql, [currency_A, currency_B, rate]);
-        const content = currencyPair.rows;
-        res.status(200).json(content);
+        const currencyPair = await client.query(sql, [rate, id]);
+        res.status(200).json({mssg: 'Successfully update currency pair'});
     } catch (error) {
         res.status(404).json({mssg: 'No such currency pair'});
     }
