@@ -12,11 +12,12 @@ const pool = new Pool({
     }
 });
 
+// connect to PostgreSQL
 pool.connect((err) => {
     if (err) {
         console.error('Connection error:', err.stack)
     } else {
-        console.log('Connected to server.')
+        console.log('Connected to PostgreSQL server.')
     }
 })
 
