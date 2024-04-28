@@ -5,11 +5,11 @@ export default function ChartComponent(props) {
     const {
         data,
         colors: {
-            backgroundColor = "white",
-            lineColor = "#2962FF",
-            textColor = "black",
+            backgroundColor = "black",
+            lineColor = '#2962FF',
+            textColor = "gray",
             areaTopColor = "#2962FF",
-            areaBottomColor = "rgba(41, 98, 255, 0.28)",
+            areaBottomColor = "rgba(41, 98, 255, 0.28)"
         } = {},
     } = props;
 
@@ -24,9 +24,18 @@ export default function ChartComponent(props) {
             layout: {
                 background: { type: ColorType.Solid, color: backgroundColor },
                 textColor,
+                
             },
             width: chartContainerRef.current.clientWidth,
             height: 300,
+            grid: {
+                vertLines: {
+                    visible: false,
+                },
+                horzLines: {
+                    visible: false,
+                }
+            },
         });
         chart.timeScale().fitContent();
 

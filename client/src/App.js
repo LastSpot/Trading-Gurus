@@ -4,6 +4,7 @@ import ChartComponent from "./TradingViewChart";
 import CurrencyInput from "./CurrencyInput";
 import {useState, useEffect} from "react";
 import axios from "axios";
+import CurrencyExchangeRates from './CurrencyExchange';
 
 const initialData = [
   { time: "2018-12-22", value: 32.51 },
@@ -95,6 +96,7 @@ function App() {
         currencies={Object.keys(rates)}
         amount={amount2}
         currency={currency2} />
+        <CurrencyExchangeRates/>
         <ChartComponent data={initialData}></ChartComponent>
     </div>
   );
