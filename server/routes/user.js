@@ -7,7 +7,7 @@ const {
     updateUser
 } = require('../controllers/user')
 
-const router = express.Router
+const router = express.Router()
 
 // Create user
 router.post('/', createUser);

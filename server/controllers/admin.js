@@ -5,13 +5,8 @@ const createAdmin = async (req, res) => {
     const { username, password } = req.body
 
     const sql = `INSERT INTO ${process.env.admin_table} VALUES ($1, $2);`
-    const findAdmin = `SELECT * FROM ${process.env.admin_table} WHERE username = $1;`
 
     try {
-        const foundAdmin = await pool.query(findAdmin, [username])
-        if (foundAdmin.rows.length) {
-            return res.status(400).json({error: 'Admin already exist'})
-        }
         await pool.query(sql, [username, password])
         res.status(200).json({mssg: 'Successfully create an admin account'})
     } catch (error) {

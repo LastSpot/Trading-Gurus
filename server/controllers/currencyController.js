@@ -62,7 +62,7 @@ const deleteCurrencyPair = async (req, res) => {
     const sql = `DELETE FROM ${process.env.data_table} WHERE code = $1;`;
 
     try {
-        const currencyPair = await pool.query(sql, [id]);
+        await pool.query(sql, [id]);
         res.status(200).json({mssg: 'Successfully delete currency pair'});
     } catch (error) {
         res.status(404).json({mssg: 'No such currency pair'});
@@ -77,7 +77,7 @@ const updateCurrencyPair = async (req, res) => {
     const sql = `UPDATE ${process.env.data_table} SET rate = $1 WHERE code = $2;`;
 
     try {
-        const currencyPair = await pool.query(sql, [rate, id]);
+        await pool.query(sql, [rate, id]);
         res.status(200).json({mssg: 'Successfully update currency pair'});
     } catch (error) {
         res.status(404).json({mssg: 'No such currency pair'});

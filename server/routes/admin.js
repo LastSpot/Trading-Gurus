@@ -7,7 +7,7 @@ const {
     updateAdmin
 } = require('../controllers/admin')
 
-const router = express.Router
+const router = express.Router()
 
 // Create admin
 router.post('/', createAdmin);
