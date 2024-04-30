@@ -32,8 +32,8 @@ const getUser = async (req, res) => {
     const sql = `SELECT * FROM ${process.env.user_table} WHERE username = $1;`
 
     try {
-        const user = pool.query(sql, [id])
-        const content = user
+        const user = await pool.query(sql, [id])
+        const content = user.rows
         res.status(200).json(content)
     } catch (error) {
         res.status(404).json({error: error.message})
