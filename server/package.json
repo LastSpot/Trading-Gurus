@@ -10,6 +10,9 @@
   "author": "Michael Le",
   "license": "ISC",
   "dependencies": {
+    "@everapi/fxapi-js": "^1.0.0",
+    "axios": "^1.6.8",
+    "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "cross-fetch": "^4.0.0",
     "dotenv": "^16.4.5",

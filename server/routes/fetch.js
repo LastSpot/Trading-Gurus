@@ -1,36 +1,29 @@
-const fetch = require('cross-fetch');
-const apiKey = 'fxa_live_XchsSeXxjeDYb0LbUJF7jPxKOE27eFW9oZPOaeHk';
-
-async function makeApiRequest(endpoint, method = 'GET', data = null) {
-    //const url = `https://api.fxapi.com/${endpoint}`;
-    const url = 'https://api.fxapi.com/v1/latest?apikey=fxa_live_XchsSeXxjeDYb0LbUJF7jPxKOE27eFW9oZPOaeHk&currencies=EUR%2CUSD%2CCAD'
-    const headers = {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-    };
-
-    const requestOptions = {
-        method: method,
-        headers: headers
-    };
-
-    if (data) {
-        requestOptions.body = JSON.stringify(data);
+const makeApiRequest = async (req, res) => {
+    try {
+      const apiKey = 'fxa_live_HxGvh5WvFtjRbvNvK4MGpm1tExlXlUWD8woMCwGk'; // Replace with your actual API key
+      const baseCurrency = req.body.base_currency || 'USD'; // Default to USD if not provided
+      const currencies = req.body.currencies || 'EUR'; // Optional list of comma-separated currencies
+  
+      const url = new URL('https://api.fxapi.com/v1/latest');
+      url.searchParams.append('apikey', apiKey);
+      url.searchParams.append('base_currency', baseCurrency);
+  
+      if (currencies) {
+        url.searchParams.append('currencies', currencies);
+      }
+      console.log(url.toString())
+      const response = await fetch(url.toString());
+  
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+  
+      const data = await response.json();
+      res.status(200).json(data);
+    } catch (error) {
+      console.error('Error making API request:', error);
+      res.status(500).json({ error: 'API request failed' }); // Generic error for client
     }
+  };
 
-    return fetch(url, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error making API request:', error);
-            throw error; // Propagate the error to the caller
-        });
-}
-
-module.exports = {
-    makeApiRequest
-};
+  module.exports = makeApiRequest
