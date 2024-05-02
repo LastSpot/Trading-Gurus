@@ -1,19 +1,20 @@
-.group{
-    background: #335;
-    width: 180px;
-    margin: 0 auto 20px;
-    display: grid;
-    grid-template-columns: 100px 80px;
-    border-radius: 15px;
+.group {
+  background: #335;
+  width: 180px;
+  margin: 0 auto 20px;
+  display: grid;
+  grid-template-columns: 100px 80px;
+  border-radius: 15px;
 }
-input,select{
-    background: none;
-    border:0;
-    color:#fff;
+input,
+select {
+  background: none;
+  border: 0;
+  color: #fff;
 }
-input{
-    padding-left: 10px;
+input {
+  padding-left: 10px;
 }
-select{
-    padding: 15px;
+select {
+  padding: 15px;
 }

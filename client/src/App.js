@@ -1,16 +1,16 @@
-import './App.css';
-import Navbar from './Navbar';
-import Profile from './pages/Profile'
-import Dashboard from './pages/Dashboard'
-import ConvertCurrency from './pages/ConvertCurrency'
-import { Route, Routes } from "react-router-dom"
+import "./App.css";
+import Navbar from "./Navbar";
+import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
+import ConvertCurrency from "./pages/ConvertCurrency";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="container">
-      <Routes>
+        <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/convert" element={<ConvertCurrency />} />
           <Route path="/profile" element={<Profile />} />

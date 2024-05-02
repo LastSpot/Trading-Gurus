@@ -1,5 +1,5 @@
-import React from 'react';
-import './styles.css';
+import React from "react";
+import "./styles.css";
 const CurrencyBubble = ({ currencyPair, rate }) => (
   <div className="currency-bubble">
     <p>{currencyPair} </p>
@@ -9,7 +9,7 @@ const CurrencyBubble = ({ currencyPair, rate }) => (
 
 const CurrencyExchangeRates = () => {
   const data = {
-    USD: 1.0,  // Base currency (USD) has a rate of 1.0
+    USD: 1.0, // Base currency (USD) has a rate of 1.0
     EUR: Math.random().toFixed(4), // Random rate between 0.5 and   1.5 (4 decimal places)
     GBP: Math.random().toFixed(4),
     JPY: Math.random().toFixed(4),
@@ -28,14 +28,18 @@ const CurrencyExchangeRates = () => {
   // Select the top 5 currency pairs
   const topFive = sortedData.slice(0, 5);
 
-  const currencyPairs = topFive.map(pair => `USD to ${pair[0]}`);
+  const currencyPairs = topFive.map((pair) => `USD to ${pair[0]}`);
 
   return (
     <div className="currency-exchange-rates">
       <h2>Exchange Rates</h2>
-      <div className="currency-exchange-rates" style={{ display: 'flex' }}>
+      <div className="currency-exchange-rates" style={{ display: "flex" }}>
         {currencyPairs.map((currencyPair, index) => (
-          <CurrencyBubble key={index} currencyPair={currencyPair} rate={topFive[index][1]} />
+          <CurrencyBubble
+            key={index}
+            currencyPair={currencyPair}
+            rate={topFive[index][1]}
+          />
         ))}
       </div>
     </div>
