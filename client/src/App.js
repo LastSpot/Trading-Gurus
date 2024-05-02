@@ -6,18 +6,18 @@ import ConvertCurrency from "./pages/ConvertCurrency";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
-  return (
-    <div>
-      <Navbar />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/convert" element={<ConvertCurrency />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </div>
-    </div>
-  );
+    return (
+        <div>
+            <Navbar />
+            <div className="container">
+                <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/convert" element={<ConvertCurrency />} />
+                    <Route path="/profile" element={<Profile />} />
+                </Routes>
+            </div>
+        </div>
+    );
 }
 
 export default App;
