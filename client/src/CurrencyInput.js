@@ -22,11 +22,11 @@ function CurrencyInput(props) {
 }
 
 CurrencyInput.propTypes = {
-  amount: PropTypes.number.isRequired,
-  currency: PropTypes.string.isRequired,
-  currencies: PropTypes.array,
-  onAmountChange: PropTypes.func,
-  onCurrencyChange: PropTypes.func,
+    amount: PropTypes.number.isRequired,
+    currency: PropTypes.string.isRequired,
+    currencies: PropTypes.array,
+    onAmountChange: PropTypes.func,
+    onCurrencyChange: PropTypes.func,
 };
 
 export default CurrencyInput;

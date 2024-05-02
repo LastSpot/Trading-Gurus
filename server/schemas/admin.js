@@ -1,4 +1,4 @@
-const pool = require('../db')
+const pool = require("../db");
 
 const adminSchema = async () => {
     const sql = `
@@ -9,11 +9,11 @@ const adminSchema = async () => {
         );
     `;
     try {
-        await pool.query(sql)
-        console.log('Successfully initialize admin schema.')
+        await pool.query(sql);
+        console.log("Successfully initialize admin schema.");
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
-}
+};
 
-module.exports = { adminSchema }
+module.exports = { adminSchema };

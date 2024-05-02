@@ -22,11 +22,11 @@ const CurrencyExchangeRates = () => {
     RUB: Math.random().toFixed(4),
   };
 
-  // Sort data object by exchange rate (highest to lowest)
-  const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    // Sort data object by exchange rate (highest to lowest)
+    const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
-  // Select the top 5 currency pairs
-  const topFive = sortedData.slice(0, 5);
+    // Select the top 5 currency pairs
+    const topFive = sortedData.slice(0, 5);
 
   const currencyPairs = topFive.map((pair) => `USD to ${pair[0]}`);
 
