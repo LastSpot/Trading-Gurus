@@ -1,0 +1,39 @@
+{
+    "meta": {
+        "last_updated_at": "2024-05-02T06:52:59Z"
+    },
+    "data": {
+        "AUD": {
+            "code": "AUD",
+            "value": 1.5294002358
+        },
+        "CAD": {
+            "code": "CAD",
+            "value": 1.371890174
+        },
+        "CHF": {
+            "code": "CHF",
+            "value": 0.9107001538
+        },
+        "EUR": {
+            "code": "EUR",
+            "value": 0.9325001849
+        },
+        "GBP": {
+            "code": "GBP",
+            "value": 0.7985101359
+        },
+        "JPY": {
+            "code": "JPY",
+            "value": 155.4346519478
+        },
+        "NZD": {
+            "code": "NZD",
+            "value": 1.6850102107
+        },
+        "USD": {
+            "code": "USD",
+            "value": 1
+        }
+    }
+}
