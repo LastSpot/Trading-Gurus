@@ -2,7 +2,8 @@ import React from 'react';
 import './styles.css';
 const CurrencyBubble = ({ currencyPair, rate }) => (
   <div className="currency-bubble">
-    <p>{currencyPair} &#8594; {rate}</p>
+    <p>{currencyPair} </p>
+    <p>{rate} USD</p>
   </div>
 );
 
