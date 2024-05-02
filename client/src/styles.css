@@ -2,14 +2,14 @@
     flex-wrap: wrap; /* Allow bubbles to wrap to next line if needed */
     justify-content: space-between;
     margin: 1rem;
-  }
-  
-  .currency-bubble {
+}
+
+.currency-bubble {
     background-color: #f0f0f0;
-    color:black;
+    color: black;
     border-radius: 45px;
     padding: 0.5rem 1rem;
     margin: 0.25rem;
     text-align: center;
     min-width: 100px; /* Set minimum width for each bubble */
-  }
+}

@@ -156,16 +156,17 @@ const getAllHistoricalPairs = async (req, res) => {
  * unique currencies: EUR, USD, JPY, GBP, AUD, CAD, CHF, NZD,
  */
 const updateCurrencies = async (req, res) => {
-    // Optional list of comma-separated currencies, default to all major pairs
+    // Optional list of comma-separated currency codes, default to all major pairs
     let currencies = req.body.currencies || "AUD,CAD,CHF,EUR,GBP,JPY,NZD,USD";
+    // currencies = "USD,EUR";
     const latestRates = [];
 
     // get latest currencies
     currencies = currencies.split(",");
-    for (const baseCurrency of currencies) {
+    for (const baseCode of currencies) {
         // base currency -> all paired quote currencies
-        const apiRes = await _makeApiRequest(baseCurrency, currencies);
-        // console.log(apiRes);
+        const apiRes = await _makeApiRequest(baseCode, currencies);
+        console.log(await _getApiStatus());
         if (apiRes.status === "error") {
             res.status(500).json({ error: "External API request failed" });
             return;
@@ -188,11 +189,16 @@ const updateCurrencies = async (req, res) => {
         for (const quoteCurrency of Object.values(apiJson.data)) {
             // skip self pairs
             const quoteCode = quoteCurrency.code;
-            if (baseCurrency === quoteCode) return;
+            if (baseCode === quoteCode) continue;
 
-            const code = baseCurrency + quoteCode;
+            const code = baseCode + quoteCode;
             const rate = quoteCurrency.value;
-            const dbRes = await _updateLatestPair(code, rate);
+            const dbRes = await _updateLatestPair(
+                code,
+                baseCode,
+                quoteCode,
+                rate
+            );
             if (dbRes.status === "error") {
                 res.status(500).json({
                     error: `Failed to update latest currency pair ${code}`,
@@ -200,7 +206,7 @@ const updateCurrencies = async (req, res) => {
                 return;
             }
             console.log(dbRes.mssg);
-            latestRates.push([code, baseCurrency, quoteCode, rate, timestamp]);
+            latestRates.push([code, baseCode, quoteCode, rate, timestamp]);
         }
 
         // throttle api requests so big brother doesnt get mad
@@ -215,6 +221,7 @@ const updateCurrencies = async (req, res) => {
             error: "Failed to insert into historical table",
         });
     } else {
+        console.log(dbRes.mssg);
         res.status(200).json({ mssg: "Successfully updated all currencies" });
     }
 };
@@ -233,10 +240,8 @@ const _makeApiRequest = async (baseCurrency, currencies) => {
         .join(",");
 
     try {
-        const apiKey = process.env.API_KEY;
-
-        // const url = new URL("https://api.fxapi.com/v1/status");
         const url = new URL("https://api.fxapi.com/v1/latest");
+        const apiKey = process.env.API_KEY;
         url.searchParams.append("apikey", apiKey);
         url.searchParams.append("base_currency", baseCurrency);
 
@@ -244,9 +249,7 @@ const _makeApiRequest = async (baseCurrency, currencies) => {
             url.searchParams.append("currencies", filtered);
         }
 
-        console.log(url.toString());
         const response = await fetch(url.toString());
-
         if (!response.ok) {
             throw new Error(
                 `API request failed with status ${response.status}`
@@ -256,21 +259,38 @@ const _makeApiRequest = async (baseCurrency, currencies) => {
         const data = await response.json();
         return { status: "success", data: data };
     } catch (error) {
-        console.error("Error making API request:", error);
+        console.error("Error making API request,", error);
         return { status: "error", data: error }; // Generic error for client
     }
 };
 
+const _getApiStatus = async () => {
+    const apiKey = process.env.API_KEY;
+    const url = new URL("https://api.fxapi.com/v1/status");
+    url.searchParams.append("apikey", apiKey);
+
+    const response = await fetch(url.toString());
+    return response.json();
+};
+
 // Update a pair
-const _updateLatestPair = async (code, rate) => {
-    const sql = `UPDATE ${process.env.latest_table} SET rate = $1 WHERE code = $2;`;
+const _updateLatestPair = async (code, base, quote, rate) => {
+    // if pair doesn't exist, insert it; else update pair
+    const sql = `
+    INSERT INTO ${process.env.latest_table} (code, base, quote, rate)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (code)
+    DO UPDATE SET base = EXCLUDED.base, quote = EXCLUDED.quote, rate = EXCLUDED.rate;
+    `;
 
     try {
-        const queryRes = await pool.query(sql, [rate, code]);
-        console.log(queryRes);
-        return { status: "success", mssg: "Successfully update currency pair" };
+        await pool.query(sql, [code, base, quote, rate]);
+        return {
+            status: "success",
+            mssg: `Successfully updated latest pair ${code}`,
+        };
     } catch (error) {
-        console.error("Error updating currency pair:", error);
+        console.error("Error updating latest pair,", error);
         return { status: "error", mssg: error };
     }
 };
@@ -279,16 +299,15 @@ const _updateLatestPair = async (code, rate) => {
 const _addCurrencyPairs = async (values) => {
     const query = `INSERT INTO ${process.env.historical_table} (code, base, quote, rate, rate_timestamp) VALUES %L;`;
     const sql = format(query, values);
-    console.log(sql);
 
     try {
         await pool.query(sql);
         return {
             status: "success",
-            mssg: "Successfully inserted into historical table",
+            mssg: `Successfully inserted ${values.length} rows into historical table`,
         };
     } catch (error) {
-        console.error("Error inserting into historical table:", error);
+        console.error("Error inserting into historical table,", error);
         return { status: "error", mssg: error };
     }
 };
