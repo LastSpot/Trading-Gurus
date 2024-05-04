@@ -7,11 +7,9 @@ const {
     deleteCurrencyPair,
     updateCurrencyPair,
 } = require('../controllers/currencyController');
-const 
-    makeApiRequest = require('./fetch');
+const makeApiRequest = require('./fetch');
 
 const router = express.Router();
-
 
 // Create pair
 router.post('/', createCurrencyPair);
