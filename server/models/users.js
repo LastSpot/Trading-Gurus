@@ -3,10 +3,10 @@ const pool = require("../db");
 const userSchema = async () => {
     const sql = `
         CREATE TABLE IF NOT EXISTS users_table (
-            username VARCHAR(100) NOT NULL,
-            password VARCHAR(100) NOT NULL,
-            role VARCHAR(50) CHECK (role IN ('user', 'admin')),
-            PRIMARY KEY (username, role)
+            login_username VARCHAR(100) NOT NULL,
+            login_password VARCHAR(100) NOT NULL,
+            user_role VARCHAR(50) CHECK (user_role IN ('user', 'admin')),
+            PRIMARY KEY (login_username, user_role)
         );
     `;
     try {
