@@ -6,10 +6,10 @@ export default function ChartComponent(props) {
         data,
         colors: {
             backgroundColor = "black",
-            lineColor = '#2962FF',
+            lineColor = "#2962FF",
             textColor = "gray",
             areaTopColor = "#2962FF",
-            areaBottomColor = "rgba(41, 98, 255, 0.28)"
+            areaBottomColor = "rgba(41, 98, 255, 0.28)",
         } = {},
     } = props;
 
@@ -17,14 +17,15 @@ export default function ChartComponent(props) {
 
     useEffect(() => {
         const handleResize = () => {
-            chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+            chart.applyOptions({
+                width: chartContainerRef.current.clientWidth,
+            });
         };
 
         const chart = createChart(chartContainerRef.current, {
             layout: {
                 background: { type: ColorType.Solid, color: backgroundColor },
                 textColor,
-                
             },
             width: chartContainerRef.current.clientWidth,
             height: 300,
@@ -34,7 +35,7 @@ export default function ChartComponent(props) {
                 },
                 horzLines: {
                     visible: false,
-                }
+                },
             },
         });
         chart.timeScale().fitContent();
@@ -53,7 +54,14 @@ export default function ChartComponent(props) {
 
             chart.remove();
         };
-    }, [data, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
+    }, [
+        data,
+        backgroundColor,
+        lineColor,
+        textColor,
+        areaTopColor,
+        areaBottomColor,
+    ]);
 
     return <div ref={chartContainerRef} />;
 }

@@ -1,4 +1,4 @@
-.group{
+.group {
     background: #335;
     width: 180px;
     margin: 0 auto 20px;
@@ -6,14 +6,15 @@
     grid-template-columns: 100px 80px;
     border-radius: 15px;
 }
-input,select{
+input,
+select {
     background: none;
-    border:0;
-    color:#fff;
+    border: 0;
+    color: #fff;
 }
-input{
+input {
     padding-left: 10px;
 }
-select{
+select {
     padding: 15px;
 }

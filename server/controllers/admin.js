@@ -1,5 +1,5 @@
 require("dotenv").config();
-const pool = require('../db');
+const pool = require("../db");
 
 const loginAdmin = async (req, res) => {
     const { username, password } = req.body
@@ -17,7 +17,7 @@ const loginAdmin = async (req, res) => {
     } catch (error) {
         res.status(400).json({mssg: 'Incorrect username or password'})
     }
-}
+};
 
 const signupAdmin = async (req, res) => {
     const { username, password } = req.body
@@ -30,7 +30,7 @@ const signupAdmin = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Duplicate username'})
     }
-}
+};
 
 const getAllUsers = async (req, res) => {
     const sql = `SELECT username, password FROM ${process.env.user_table} WHERE role = 'user';`

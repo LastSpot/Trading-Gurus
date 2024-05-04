@@ -1,5 +1,5 @@
 require("dotenv").config();
-const pool = require('../db');
+const pool = require("../db");
 
 const loginUser = async (req, res) => {
     const { username, password } = req.body
@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
     } catch (error) {
         res.status(400).json({error: 'Incorrect username or password'})
     }
-}
+};
 
 const signupUser = async (req, res) => {
     const { username, password } = req.body
@@ -30,7 +30,7 @@ const signupUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Duplicate username'})
     }
-}
+};
 
 module.exports = {
     loginUser,
