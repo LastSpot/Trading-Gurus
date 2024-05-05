@@ -182,7 +182,7 @@ const updateCurrencies = async (req, res) => {
 
     // get latest currencies
     currencies = currencies.split(",");
-    if (currencies > 10) {
+    if (currencies.length > 10) {
         return res.status(400).json({ error: "More than 10 currencies given" });
     }
 
@@ -314,7 +314,7 @@ const _updateLatestPair = async (code, base, quote, rate) => {
 
 // Update a pair
 const _addCurrencyPairs = async (values) => {
-    if (values == undefined || values.length === 0 || [].includes(undefined)) {
+    if (values == undefined || values.length === 0 || values.includes(undefined)) {
         console.log("addCurrencyPairs bad values:", values);
         return {
             status: "error",
