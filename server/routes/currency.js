@@ -6,6 +6,7 @@ const {
     deleteLatestPair,
     updateLatestPair,
     getAllHistoricalPairs,
+    getHistoricalPair,
     updateCurrencies,
 } = require("../controllers/currencyController");
 // const makeApiRequest = require("./fetch");
@@ -28,9 +29,13 @@ router.delete("/:id", deleteLatestPair);
 // Update a pair
 router.patch("/:id", updateLatestPair);
 
-// Get all pair
+// Get all historical pair
 router.get("/historical", getAllHistoricalPairs);
 
+// Get a historical pair
+router.get("/historical/:id", getHistoricalPair);
+
+// Update all currencies
 router.get("/update", updateCurrencies);
 
 module.exports = router;

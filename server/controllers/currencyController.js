@@ -134,7 +134,7 @@ const updateLatestPair = async (req, res) => {
     }
 };
 
-// Get all pairs
+// Get all historical pairs
 const getAllHistoricalPairs = async (req, res) => {
     const sql = `SELECT * FROM ${process.env.historical_table};`;
 
@@ -144,6 +144,25 @@ const getAllHistoricalPairs = async (req, res) => {
         res.status(200).json(content);
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+// Get a historical pair
+const getHistoricalPair = async (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM ${process.env.historical_table} WHERE CODE = $1;`;
+
+    try {
+        const currencyPair = await pool.query(sql, [id]);
+        const content = currencyPair.rows;
+        if (!content) {
+            return res
+                .status(404)
+                .json({ mssg: "No such historical currency pair" });
+        }
+        res.status(200).json(content);
+    } catch (error) {
+        res.status(404).json({ mssg: "No such historical currency pair" });
     }
 };
 
@@ -163,20 +182,21 @@ const updateCurrencies = async (req, res) => {
 
     // get latest currencies
     currencies = currencies.split(",");
+    if (currencies > 10) {
+        return res.status(400).json({ error: "More than 10 currencies given" });
+    }
+
     for (const baseCode of currencies) {
         // base currency -> all paired quote currencies
         const apiRes = await _makeApiRequest(baseCode, currencies);
-        console.log(await _getApiStatus());
         if (apiRes.status === "error") {
-            res.status(500).json({ error: "External API request failed" });
-            return;
+            return res.status(500).json({ error: "External API request failed" });
         }
         const apiJson = apiRes.data;
         if (!validateApi(apiJson)) {
             console.log(apiJson);
             console.error(validateApi.errors);
-            res.status(500).json({ error: "External API request failed" }); // Generic error for client
-            return;
+            return res.status(500).json({ error: "External API request failed" }); // Generic error for client
         }
 
         // get timestamp and format for sql ("2024-05-02T06:52:59Z" -> "2024-05-02 06:52:59")
@@ -200,19 +220,16 @@ const updateCurrencies = async (req, res) => {
                 rate
             );
             if (dbRes.status === "error") {
-                res.status(500).json({
+                return res.status(500).json({
                     error: `Failed to update latest currency pair ${code}`,
                 });
-                return;
             }
-            console.log(dbRes.mssg);
             latestRates.push([code, baseCode, quoteCode, rate, timestamp]);
         }
 
         // throttle api requests so big brother doesnt get mad
         await new Promise((res) => setTimeout(res, 100));
     }
-    console.log("rates:", latestRates);
 
     // insert latest rates into to historical table
     const dbRes = await _addCurrencyPairs(latestRates);
@@ -221,9 +238,9 @@ const updateCurrencies = async (req, res) => {
             error: "Failed to insert into historical table",
         });
     } else {
-        console.log(dbRes.mssg);
         res.status(200).json({ mssg: "Successfully updated all currencies" });
     }
+    console.log(await _getApiStatus());
 };
 
 /**
@@ -260,7 +277,7 @@ const _makeApiRequest = async (baseCurrency, currencies) => {
         return { status: "success", data: data };
     } catch (error) {
         console.error("Error making API request,", error);
-        return { status: "error", data: error }; // Generic error for client
+        return { status: "error", data: error };
     }
 };
 
@@ -297,6 +314,14 @@ const _updateLatestPair = async (code, base, quote, rate) => {
 
 // Update a pair
 const _addCurrencyPairs = async (values) => {
+    if (values == undefined || values.length === 0 || [].includes(undefined)) {
+        console.log("addCurrencyPairs bad values:", values);
+        return {
+            status: "error",
+            mssg: "array is empty/undefined or contains undefined",
+        };
+    }
+
     const query = `INSERT INTO ${process.env.historical_table} (code, base, quote, rate, rate_timestamp) VALUES %L;`;
     const sql = format(query, values);
 
@@ -319,5 +344,6 @@ module.exports = {
     deleteLatestPair,
     updateLatestPair,
     getAllHistoricalPairs,
+    getHistoricalPair,
     updateCurrencies,
 };
