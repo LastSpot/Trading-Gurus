@@ -3,7 +3,7 @@ const {
     loginAdmin,
     signupAdmin,
     getAllUsers
-} = require('../controllers/admin')
+} = require('../controllers/adminController')
 
 const router = express.Router();
 

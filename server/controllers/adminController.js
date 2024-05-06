@@ -1,19 +1,19 @@
 require("dotenv").config();
 const pool = require("../db");
 
+const createToken = (login_username, role) => {
+    return jwt.sign({login_username, role}, process.env.JWT_SECRET, {expiresIn: '1d'})
+}
+
 const loginAdmin = async (req, res) => {
     const { login_username, login_password } = req.body
 
     const sql = `SELECT * FROM ${process.env.user_table} WHERE login_username = $1 AND login_password = $2 AND user_role = 'admin';`
 
     try {
-        const adminLogin = await pool.query(sql, [login_username, login_password])
-        const content = adminLogin.rows
-
-        // localStorage.clear()
-        // localStorage.setItem('login', JSON.stringify(content))
-
-        res.status(200).json(content)
+        await pool.query(sql, [login_username, login_password])
+        const token = createToken(login_username, 'admin')
+        res.status(200).json({token})
     } catch (error) {
         res.status(400).json({error: error.message})
     }
@@ -26,7 +26,8 @@ const signupAdmin = async (req, res) => {
 
     try {
         await pool.query(sql, [login_username, login_password])
-        res.status(200).json({mssg: 'Successfully create an admin account'})
+        const token = createToken(login_username, 'admin')
+        res.status(200).json({token})
     } catch (error) {
         res.status(500).json({error: error.message})
     }
