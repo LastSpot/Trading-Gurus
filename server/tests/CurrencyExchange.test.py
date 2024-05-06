@@ -29,7 +29,7 @@ with psycopg2.connect(
         pairs = list(itertools.combinations(currencies, 2))
         funcs = [
             CE.prunedBacktrackWithProportionalFee,
-            CE.prunedDijkstraWithProportionalFee,
+            # CE.prunedDijkstraWithProportionalFee,
         ]
         for func in funcs:
             for base, quote in pairs:
@@ -37,8 +37,8 @@ with psycopg2.connect(
                 direct = cur.fetchone()
                 # print(direct)
 
-                optimal = json.loads(func(rates, base, quote, feePerUnit=0.00003))
-                if optimal["optimal_path"]:
+                optimal = json.loads(func(rates, base, quote, feePerUnit=0.00000))
+                if len(optimal["optimal_path"]) > 2:
                     print("direct :", direct[3], direct[1], direct[2])
                     print(
                         "optimal:",

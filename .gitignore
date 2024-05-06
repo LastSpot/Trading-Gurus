@@ -50,5 +50,8 @@ out
 .yarn/install-state.gz
 .pnp.*
 
+# python
+**/__pycache__/
+
 # misc
 historical_data/
