@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import CurrencyInput from "./CurrencyInput";
-import "../../styles.css"
+import "../../styles.css";
 
 const currencies = [
     { label: "EUR - Euro", value: "EUR" },
