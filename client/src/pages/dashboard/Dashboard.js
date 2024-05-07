@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ChartComponent from "./ChartComponent";
 import CurrencyExchangeRates from "./CurrencyExchangeRates";
 import CurrencyDropdown from "../currency/CurrencyDropdown";
+import useSWR from "swr";
 
 // EUR, USD, JPY, GBP, AUD, CAD, CHF, NZD,
 const currencies = [
@@ -35,6 +36,8 @@ const currencies = [
     { label: "NZDUSD", value: "NZDUSD" },
 ];
 
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
 /**
  * Observer
  */
@@ -49,7 +52,7 @@ export default function Dashboard(props) {
         "USDCAD",
     ]);
     const [currencyData, setCurrencyData] = useState([]);
-    const [historicalData, setHistoricalData] = useState([]);
+    // const [historicalData, setHistoricalData] = useState([]);
     const [inputCurrency, setInputCurrency] = useState(currencies[0].value);
     const [chartIdx, setChartIdx] = useState(0); // TODO: user can change chart
 
@@ -64,21 +67,14 @@ export default function Dashboard(props) {
     //             setCurrencyData(data);
     //         });
     // }, []);
-    useEffect(() => {
-        Promise.resolve(fetch(`/currency/historical/`))
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("fetching historical");
-                setHistoricalData(data);
-            });
-    }, []);
-
-    useEffect(() => {
-        // Update currencyData based on historicalData
-        setCurrencyData(
-            historicalData.filter((pair) => inputCurrency === pair.code)
-        );
-    }, [historicalData, inputCurrency]);
+    // useEffect(() => {
+    //     Promise.resolve(fetch(`/currency/historical/`))
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log("fetching historical");
+    //             setHistoricalData(data);
+    //         });
+    // }, []);
 
     // if (currencyData.length === 0) {
     //     return <div>Loading...</div>; // Or any loading indicator
@@ -86,6 +82,25 @@ export default function Dashboard(props) {
     // if (historicalData.length === 0) {
     //     return <div>Loading...</div>; // Or any loading indicator
     // }
+
+    const {
+        data: historicalData,
+        error,
+        isValidating,
+    } = useSWR("/currency/historical/", fetcher);
+
+    useEffect(() => {
+        // Update currencyData based on historicalData
+        if (historicalData) {
+            setCurrencyData(
+                historicalData.filter((pair) => inputCurrency === pair.code)
+            );
+        }
+    }, [historicalData, inputCurrency]);
+
+    // Handles error and loading state
+    if (error) return <div className="failed">failed to load</div>;
+    if (isValidating) return <div className="Loading">Loading...</div>;
 
     console.log("5", historicalData);
     console.log("2", currencyData);
@@ -125,6 +140,7 @@ export default function Dashboard(props) {
                 />
             </div>
             <CurrencyExchangeRates exchanges={exchanges} />
+            <h2>{inputCurrency}: </h2>
             <ChartComponent data={chartData}></ChartComponent>
         </div>
     );
