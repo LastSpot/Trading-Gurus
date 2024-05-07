@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ChartComponent from "../TradingViewChart";
 import CurrencyExchangeRates from "../CurrencyExchange";
+import CurrencyInput from "../CurrencyInput"; // Import CurrencyInput component
 
 const currencyOptions = [
     { label: 'USD - US Dollar', value: 'USD' },
@@ -30,21 +31,42 @@ export default function Dashboard() {
         { time: "2018-12-31", value: 22.67 },
     ];
 
-    const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0].value);
+    const [inputCurrency, setInputCurrency] = useState(currencyOptions[0].value);
+    const [endCurrency, setEndCurrency] = useState(currencyOptions[1].value);
 
-    const handleCurrencyChange = (event) => {
-        const selectedValue = event.target.value;
-        setSelectedCurrency(selectedValue);
+    const handleInputCurrencyChange = (value) => {
+        setInputCurrency(value);
+    };
+
+    const handleEndCurrencyChange = (value) => {
+        setEndCurrency(value);
     };
 
     return (
         <div className="dashboard">
-            <select value={selectedCurrency} onChange={handleCurrencyChange}>
-                {currencyOptions.map(option => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-            </select>
-            <CurrencyExchangeRates currency={selectedCurrency} />
+            <div>
+                <label>Input Currency:</label>
+                {/* Use CurrencyInput for selecting input currency */}
+                <CurrencyInput
+                    amount={1}
+                    currency={inputCurrency}
+                    currencies={currencyOptions.map(option => option.value)}
+                    onAmountChange={() => {}}
+                    onCurrencyChange={handleInputCurrencyChange}
+                />
+            </div>
+            <div>
+                <label>End Currency:</label>
+                {/* Use CurrencyInput for selecting end currency */}
+                <CurrencyInput
+                    amount={1}
+                    currency={endCurrency}
+                    currencies={currencyOptions.map(option => option.value)}
+                    onAmountChange={() => {}}
+                    onCurrencyChange={handleEndCurrencyChange}
+                />
+            </div>
+            <CurrencyExchangeRates inputCurrency={inputCurrency} endCurrency={endCurrency} />
             <ChartComponent data={initialData}></ChartComponent>
         </div>
     );
