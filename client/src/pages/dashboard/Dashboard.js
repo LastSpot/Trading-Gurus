@@ -53,7 +53,8 @@ export default function Dashboard(props) {
     ]);
     const [currencyData, setCurrencyData] = useState([]);
     // const [historicalData, setHistoricalData] = useState([]);
-    const [inputCurrency, setInputCurrency] = useState(currencies[0].value);
+    const [curCurrency, setCurCurrency] = useState(currencies[0].value);
+    const [latestRate, setLatestRate] = useState(0);
     const [chartIdx, setChartIdx] = useState(0); // TODO: user can change chart
 
     // data: [{code, base, quote, rate, rate_timestamp}]
@@ -93,21 +94,31 @@ export default function Dashboard(props) {
         // Update currencyData based on historicalData
         if (historicalData) {
             setCurrencyData(
-                historicalData.filter((pair) => inputCurrency === pair.code)
+                historicalData.filter((pair) => curCurrency === pair.code)
             );
         }
-    }, [historicalData, inputCurrency]);
+    }, [historicalData, curCurrency]);
+
+    useEffect(() => {
+        // Update latestDate based on currencyData
+        if (currencyData) {
+            setLatestRate(Math.max);
+        }
+    }, [currencyData, curCurrency]);
 
     // Handles error and loading state
     if (error) return <div className="failed">failed to load</div>;
     if (isValidating) return <div className="Loading">Loading...</div>;
 
-    console.log("5", historicalData);
-    console.log("2", currencyData);
+    console.log("historical", historicalData);
+    console.log("currency", currencyData);
 
     const chartData = currencyData
         .map((dataPoint) => ({
-            time: dataPoint.rate_timestamp.substring(0, 10),
+            time: Math.floor(
+                new Date(dataPoint.rate_timestamp.substring(0, 10)).getTime() /
+                    1000
+            ),
             value: dataPoint.rate,
         }))
         .toSorted((a, b) => {
@@ -124,7 +135,7 @@ export default function Dashboard(props) {
     //         })
     //         .toSorted((a, b) => b.time < a.time)
     // );
-    console.log("3", currencyData);
+    console.log("chart", chartData);
 
     // TODO: when clicking on a bubble, change chart to that currency
 
@@ -134,13 +145,15 @@ export default function Dashboard(props) {
                 <label>Exchange Pairs:</label>
                 {/* TODO: Make this a checkbox dropdown so it matches currency bubbles */}
                 <CurrencyDropdown
-                    currency={inputCurrency}
+                    currency={curCurrency}
                     currencies={currencies.map((option) => option.value)}
-                    onCurrencyChange={setInputCurrency}
+                    onCurrencyChange={setCurCurrency}
                 />
             </div>
             <CurrencyExchangeRates exchanges={exchanges} />
-            <h2>{inputCurrency}: </h2>
+            <div>
+                <h2>{curCurrency}: </h2>
+            </div>
             <ChartComponent data={chartData}></ChartComponent>
         </div>
     );
