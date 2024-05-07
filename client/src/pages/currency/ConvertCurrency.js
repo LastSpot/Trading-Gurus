@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import ChartComponent from "../TradingViewChart";
-import CurrencyExchangeRates from "../CurrencyExchange";
+import { useState, useEffect } from "react";
+import CurrencyInput from "./CurrencyInput";
 
 const currencyOptions = [
     { label: 'USD - US Dollar', value: 'USD' },

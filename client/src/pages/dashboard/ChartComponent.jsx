@@ -1,6 +1,11 @@
 import { createChart, ColorType } from "lightweight-charts";
 import React, { useEffect, useRef } from "react";
 
+/**
+ *
+ * @param {Currency[]} props.data
+ * @returns
+ */
 export default function ChartComponent(props) {
     const {
         data,
