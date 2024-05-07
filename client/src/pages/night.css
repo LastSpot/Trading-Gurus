@@ -1,0 +1,13 @@
+.dashboard {
+    /* Default day mode styles */
+    background-color: #fff;
+    color: #000;
+}
+
+.dashboard.night-mode {
+    /* Night mode styles */
+    background-color: #333;
+    color: #fff;
+}
+
+/* Additional styles for CurrencyExchangeRates and ChartComponent if needed */
