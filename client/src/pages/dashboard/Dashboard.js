@@ -121,10 +121,7 @@ export default function Dashboard(props) {
             ),
             value: dataPoint.rate,
         }))
-        .toSorted((a, b) => {
-            if (a.time === b.time) console.log(a, b);
-            return b.time < a.time;
-        });
+        .sort((a, b) => a.time - b.time);
     // const chartData = currencyData.map((pair) =>
     //     pair
     //         .map((dataPoint) => {
