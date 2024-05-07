@@ -1,5 +1,16 @@
+import React, { useState } from 'react';
 import ChartComponent from "../TradingViewChart";
 import CurrencyExchangeRates from "../CurrencyExchange";
+
+const currencyOptions = [
+    { label: 'USD', value: 'USD' },
+    { label: 'EUR', value: 'EUR' },
+    { label: 'GBP', value: 'GBP' },
+    { label: 'JPY', value: 'JPY' },
+    { label: 'CNY', value: 'CNY' },
+    { label: 'RUB', value: 'RUB' },
+    // Add more currency options as needed
+];
 
 export default function Dashboard() {
     const initialData = [
@@ -14,9 +25,21 @@ export default function Dashboard() {
         { time: "2018-12-30", value: 22.68 },
         { time: "2018-12-31", value: 22.67 },
     ];
+
+    const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0].value);
+
+    const handleCurrencyChange = (event) => {
+        setSelectedCurrency(event.target.value);
+    };
+
     return (
-        <div>
-            <CurrencyExchangeRates />
+        <div className="dashboard">
+            <select value={selectedCurrency} onChange={handleCurrencyChange}>
+                {currencyOptions.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+            </select>
+            <CurrencyExchangeRates currency={selectedCurrency} />
             <ChartComponent data={initialData}></ChartComponent>
         </div>
     );

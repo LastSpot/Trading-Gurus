@@ -65,3 +65,29 @@ body {
 .nav li:hover {
     background-color: #777;
 }
+
+
+body.night-mode {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.currency-exchange-rates .currency-bubble {
+    background-color: #f0f0f0 !important;
+    color: black !important;
+}
+
+.nav {
+    background-color: #333 !important;
+    color: white !important;
+}
+
+.nav li.active {
+    background-color: #555 !important;
+}
+
+.nav li:hover {
+    background-color: #777 !important;
+}
+
+/* Add !important to other relevant styles as needed */
