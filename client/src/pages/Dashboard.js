@@ -3,13 +3,17 @@ import ChartComponent from "../TradingViewChart";
 import CurrencyExchangeRates from "../CurrencyExchange";
 
 const currencyOptions = [
-    { label: 'USD', value: 'USD' },
-    { label: 'EUR', value: 'EUR' },
-    { label: 'GBP', value: 'GBP' },
-    { label: 'JPY', value: 'JPY' },
-    { label: 'CNY', value: 'CNY' },
-    { label: 'RUB', value: 'RUB' },
-    // Add more currency options as needed
+    { label: 'USD - US Dollar', value: 'USD' },
+    { label: 'CAD - Canadian Dollar', value: 'CAD' },
+    { label: 'JPY - Japanese Yen', value: 'JPY' },
+    { label: 'GBP - British Pound', value: 'GBP' },
+    { label: 'EUR - Euro', value: 'EUR' },
+    { label: 'AUD - Australian Dollar', value: 'AUD' },
+    { label: 'CNY - Chinese Yuan', value: 'CNY' },
+    { label: 'RUB - Russian Ruble', value: 'RUB' },
+    { label: 'BRL - Brazilian Real', value: 'BRL' },
+    { label: 'CHF - Swiss Franc', value: 'CHF' },
+    { label: 'MXN - Mexican Peso', value: 'MXN' },
 ];
 
 export default function Dashboard() {
@@ -29,7 +33,8 @@ export default function Dashboard() {
     const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0].value);
 
     const handleCurrencyChange = (event) => {
-        setSelectedCurrency(event.target.value);
+        const selectedValue = event.target.value;
+        setSelectedCurrency(selectedValue);
     };
 
     return (

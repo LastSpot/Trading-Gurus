@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles.css";
+
 const CurrencyBubble = ({ currencyPair, rate }) => (
     <div className="currency-bubble">
         <p>{currencyPair} </p>
@@ -10,7 +11,7 @@ const CurrencyBubble = ({ currencyPair, rate }) => (
 const CurrencyExchangeRates = () => {
     const data = {
         USD: 1.0, // Base currency (USD) has a rate of 1.0
-        EUR: Math.random().toFixed(4), // Random rate between 0.5 and   1.5 (4 decimal places)
+        EUR: Math.random().toFixed(4), // Random rate between 0.5 and 1.5 (4 decimal places)
         GBP: Math.random().toFixed(4),
         JPY: Math.random().toFixed(4),
         CNY: Math.random().toFixed(4),
