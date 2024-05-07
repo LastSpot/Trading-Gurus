@@ -1,5 +1,5 @@
-import ChartComponent from "../TradingViewChart";
-import CurrencyExchangeRates from "../CurrencyExchange";
+import ChartComponent from "./TradingViewChart";
+import CurrencyExchangeRates from "./CurrencyExchange";
 
 export default function Dashboard() {
     const initialData = [

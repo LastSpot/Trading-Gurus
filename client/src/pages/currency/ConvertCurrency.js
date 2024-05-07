@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import CurrencyInput from "../CurrencyInput";
+import CurrencyInput from "./CurrencyInput";
 
 export default function ConvertCurrency() {
     const initialData = [

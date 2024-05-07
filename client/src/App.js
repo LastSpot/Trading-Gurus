@@ -1,8 +1,8 @@
 import "./App.css";
-import Navbar from "./Navbar";
-import Profile from "./pages/Profile";
-import Dashboard from "./pages/Dashboard";
-import ConvertCurrency from "./pages/ConvertCurrency";
+import Navbar from "./pages/dashboard/Navbar";
+import Profile from "./pages/profile/Profile";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ConvertCurrency from "./pages/currency/ConvertCurrency";
 import { Route, Routes } from "react-router-dom";
 
 function App() {

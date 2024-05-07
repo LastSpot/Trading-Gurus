@@ -1,5 +1,8 @@
 import React from "react";
-import "./styles.css";
+import "../../styles.css";
+import useSWR from "swr";
+// require("dotenv").config();
+
 const CurrencyBubble = ({ currencyPair, rate }) => (
     <div className="currency-bubble">
         <p>{currencyPair} </p>
@@ -7,28 +10,31 @@ const CurrencyBubble = ({ currencyPair, rate }) => (
     </div>
 );
 
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
 const CurrencyExchangeRates = () => {
-    const data = {
-        USD: 1.0, // Base currency (USD) has a rate of 1.0
-        EUR: Math.random().toFixed(4), // Random rate between 0.5 and   1.5 (4 decimal places)
-        GBP: Math.random().toFixed(4),
-        JPY: Math.random().toFixed(4),
-        CNY: Math.random().toFixed(4),
-        AUD: Math.random().toFixed(4),
-        CHF: Math.random().toFixed(4),
-        CAD: Math.random().toFixed(4),
-        MXN: Math.random().toFixed(4),
-        BRL: Math.random().toFixed(4),
-        RUB: Math.random().toFixed(4),
-    };
+    const {
+        // data: (code, base, quote, rate)
+        data: currencyData,
+        error,
+        isValidating,
+    } = useSWR(`http://localhost:8000/currency`, fetcher);
+
+    // Handles error and loading state
+    if (error) return <div className="failed">failed to load</div>;
+    if (isValidating) return <div className="Loading">Loading...</div>;
 
     // Sort data object by exchange rate (highest to lowest)
-    const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    const sortedData = Object.values(currencyData).sort((a, b) => b[3] - a[3]);
 
     // Select the top 5 currency pairs
     const topFive = sortedData.slice(0, 5);
+    // console.log(topFive);
 
-    const currencyPairs = topFive.map((pair) => `USD to ${pair[0]}`);
+    const currencyPairs = topFive.map(
+        (pair) => `${pair.base} to ${pair.quote}`
+    );
+    // console.log(currencyPairs);
 
     return (
         <div className="currency-exchange-rates">
@@ -41,7 +47,7 @@ const CurrencyExchangeRates = () => {
                     <CurrencyBubble
                         key={index}
                         currencyPair={currencyPair}
-                        rate={topFive[index][1]}
+                        rate={topFive[index].rate}
                     />
                 ))}
             </div>
