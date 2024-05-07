@@ -2,17 +2,14 @@ import { useState, useEffect } from "react";
 import CurrencyInput from "./CurrencyInput";
 
 const currencyOptions = [
-    { label: 'USD - US Dollar', value: 'USD' },
-    { label: 'CAD - Canadian Dollar', value: 'CAD' },
-    { label: 'JPY - Japanese Yen', value: 'JPY' },
-    { label: 'GBP - British Pound', value: 'GBP' },
-    { label: 'EUR - Euro', value: 'EUR' },
-    { label: 'AUD - Australian Dollar', value: 'AUD' },
-    { label: 'CNY - Chinese Yuan', value: 'CNY' },
-    { label: 'RUB - Russian Ruble', value: 'RUB' },
-    { label: 'BRL - Brazilian Real', value: 'BRL' },
-    { label: 'CHF - Swiss Franc', value: 'CHF' },
-    { label: 'MXN - Mexican Peso', value: 'MXN' },
+    { label: "USD - US Dollar", value: "USD" },
+    { label: "CAD - Canadian Dollar", value: "CAD" },
+    { label: "JPY - Japanese Yen", value: "JPY" },
+    { label: "GBP - British Pound", value: "GBP" },
+    { label: "EUR - Euro", value: "EUR" },
+    { label: "AUD - Australian Dollar", value: "AUD" },
+    { label: "CHF - Swiss Franc", value: "CHF" },
+    { label: "NZD - New Zealand Dollar", value: "NZD" },
 ];
 
 export default function Dashboard() {
@@ -29,7 +26,9 @@ export default function Dashboard() {
         { time: "2018-12-31", value: 22.67 },
     ];
 
-    const [inputCurrency, setInputCurrency] = useState(currencyOptions[0].value);
+    const [inputCurrency, setInputCurrency] = useState(
+        currencyOptions[0].value
+    );
     const [endCurrency, setEndCurrency] = useState(currencyOptions[1].value);
     const [exchangeRates, setExchangeRates] = useState(null);
 
@@ -39,11 +38,13 @@ export default function Dashboard() {
             try {
                 // Simulate fetching exchange rates from an API
                 // Replace this with your actual API call
-                const response = await fetch(`https://api.example.com/exchange-rates?input=${inputCurrency}&end=${endCurrency}`);
+                const response = await fetch(
+                    `https://api.example.com/exchange-rates?input=${inputCurrency}&end=${endCurrency}`
+                );
                 const data = await response.json();
                 setExchangeRates(data);
             } catch (error) {
-                console.error('Error fetching exchange rates:', error);
+                console.error("Error fetching exchange rates:", error);
             }
         };
 
@@ -64,22 +65,29 @@ export default function Dashboard() {
         <div className="dashboard">
             <div>
                 <label>Input Currency:</label>
-                <select value={inputCurrency} onChange={handleInputCurrencyChange}>
-                    {currencyOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                <select
+                    value={inputCurrency}
+                    onChange={handleInputCurrencyChange}
+                >
+                    {currencyOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
                     ))}
                 </select>
             </div>
             <div>
                 <label>End Currency:</label>
                 <select value={endCurrency} onChange={handleEndCurrencyChange}>
-                    {currencyOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                    {currencyOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
                     ))}
                 </select>
             </div>
-            <CurrencyExchangeRates inputCurrency={inputCurrency} endCurrency={endCurrency} exchangeRates={exchangeRates} />
-            <ChartComponent data={initialData}></ChartComponent>
+            {/* <CurrencyExchangeRates inputCurrency={inputCurrency} endCurrency={endCurrency} exchangeRates={exchangeRates} />
+            <ChartComponent data={initialData}></ChartComponent> */}
         </div>
     );
 }
