@@ -49,50 +49,66 @@ export default function Dashboard(props) {
         "USDCAD",
     ]);
     const [currencyData, setCurrencyData] = useState([]);
+    const [historicalData, setHistoricalData] = useState([]);
     const [inputCurrency, setInputCurrency] = useState(currencies[0].value);
-    const [outputCurrency, setOutputCurrency] = useState(currencies[1].value);
     const [chartIdx, setChartIdx] = useState(0); // TODO: user can change chart
 
     // data: [{code, base, quote, rate, rate_timestamp}]
-    useEffect(() => {
-        Promise.all(
-            exchanges.map((code) => fetch(`/currency/historical/${code}`))
-        )
-            .then((res) => Promise.all(res.map((pair) => pair.json())))
-            .then((data) => {
-                console.log("1", data);
-                setCurrencyData(data);
-            });
-    }, []);
     // useEffect(() => {
-    //     fetch(`/currency/historical/EURUSD`)
-    //         .then((res) => res.json())
+    //     Promise.all(
+    //         exchanges.map((code) => fetch(`/currency/historical/${code}`))
+    //     )
+    //         .then((res) => Promise.all(res.map((pair) => pair.json())))
     //         .then((data) => {
     //             console.log("1", data);
     //             setCurrencyData(data);
     //         });
     // }, []);
+    useEffect(() => {
+        Promise.resolve(fetch(`/currency/historical/`))
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("fetching historical");
+                setHistoricalData(data);
+            });
+    }, []);
 
-    if (currencyData.length === 0) {
-        return <div>Loading...</div>; // Or any loading indicator
-    }
+    useEffect(() => {
+        // Update currencyData based on historicalData
+        setCurrencyData(
+            historicalData.filter((pair) => inputCurrency === pair.code)
+        );
+    }, [historicalData, inputCurrency]);
 
-    // const chartData = currencyData
-    //     .map((dataPoint) => ({
-    //         time: dataPoint.rate_timestamp.substring(0, 10),
-    //         value: dataPoint.rate,
-    //     }))
-    //     .toSorted((a, b) => b.time < a.time);
-    const chartData = currencyData.map((pair) =>
-        pair
-            .map((dataPoint) => {
-                return {
-                    time: dataPoint.rate_timestamp.substring(0, 10),
-                    value: dataPoint.rate,
-                };
-            })
-            .toSorted((a, b) => b.time < a.time)
-    );
+    // if (currencyData.length === 0) {
+    //     return <div>Loading...</div>; // Or any loading indicator
+    // }
+    // if (historicalData.length === 0) {
+    //     return <div>Loading...</div>; // Or any loading indicator
+    // }
+
+    console.log("5", historicalData);
+    console.log("2", currencyData);
+
+    const chartData = currencyData
+        .map((dataPoint) => ({
+            time: dataPoint.rate_timestamp.substring(0, 10),
+            value: dataPoint.rate,
+        }))
+        .toSorted((a, b) => {
+            if (a.time === b.time) console.log(a, b);
+            return b.time < a.time;
+        });
+    // const chartData = currencyData.map((pair) =>
+    //     pair
+    //         .map((dataPoint) => {
+    //             return {
+    //                 time: dataPoint.rate_timestamp.substring(0, 10),
+    //                 value: dataPoint.rate,
+    //             };
+    //         })
+    //         .toSorted((a, b) => b.time < a.time)
+    // );
     console.log("3", currencyData);
 
     // TODO: when clicking on a bubble, change chart to that currency
@@ -109,7 +125,7 @@ export default function Dashboard(props) {
                 />
             </div>
             <CurrencyExchangeRates exchanges={exchanges} />
-            <ChartComponent data={chartData[chartIdx]}></ChartComponent>
+            <ChartComponent data={chartData}></ChartComponent>
         </div>
     );
 }
