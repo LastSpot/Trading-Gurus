@@ -1,75 +1,76 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CurrencyInput from "./CurrencyInput";
 
-const currencyOptions = [
+const currencies = [
+    { label: "EUR - Euro", value: "EUR" },
     { label: "USD - US Dollar", value: "USD" },
     { label: "CAD - Canadian Dollar", value: "CAD" },
     { label: "JPY - Japanese Yen", value: "JPY" },
     { label: "GBP - British Pound", value: "GBP" },
-    { label: "EUR - Euro", value: "EUR" },
     { label: "AUD - Australian Dollar", value: "AUD" },
     { label: "CHF - Swiss Franc", value: "CHF" },
     { label: "NZD - New Zealand Dollar", value: "NZD" },
 ];
 
-export default function Dashboard() {
-    const initialData = [
-        { time: "2018-12-22", value: 32.51 },
-        { time: "2018-12-23", value: 31.11 },
-        { time: "2018-12-24", value: 27.02 },
-        { time: "2018-12-25", value: 27.32 },
-        { time: "2018-12-26", value: 25.17 },
-        { time: "2018-12-27", value: 28.89 },
-        { time: "2018-12-28", value: 25.46 },
-        { time: "2018-12-29", value: 23.92 },
-        { time: "2018-12-30", value: 22.68 },
-        { time: "2018-12-31", value: 22.67 },
-    ];
+export default function ConvertCurrency() {
+    const [base, setBase] = useState(currencies[0].value);
+    const [quote, setQuote] = useState(currencies[1].value);
+    const [fee, setFee] = useState(0);
+    const [optimalRate, setOptimalRate] = useState(0);
+    const [optimalPath, setOptimalPath] = useState([]);
+    const [directRate, setDirectRate] = useState(0);
 
-    const [inputCurrency, setInputCurrency] = useState(
-        currencyOptions[0].value
-    );
-    const [endCurrency, setEndCurrency] = useState(currencyOptions[1].value);
-    const [exchangeRates, setExchangeRates] = useState(null);
+    // called everytime base, quote, or fee changes. should change to only button onClick
+    // also changing fee is buggy
+    const convert = useCallback(() => {
+        Promise.all([
+            fetch(`/currency/convert/${base}/${quote}/${fee}`),
+            fetch("/currency"),
+        ])
+            .then((res) => Promise.all(res.map((prom) => prom.json())))
+            .then(([output, latestData]) => {
+                const conversion = JSON.parse(output);
+                setOptimalRate(conversion.optimal_rate);
+                setOptimalPath(conversion.optimal_path);
+                if (base === quote) {
+                    setDirectRate(1);
+                } else {
+                    setDirectRate(
+                        latestData.filter(
+                            (pairs) => pairs.code === base + quote
+                        )[0].rate
+                    );
+                }
+            });
+    }, [base, quote, fee]);
 
-    useEffect(() => {
-        // Fetch exchange rates based on input and end currencies
-        const fetchExchangeRates = async () => {
-            try {
-                // Simulate fetching exchange rates from an API
-                // Replace this with your actual API call
-                const response = await fetch(
-                    `https://api.example.com/exchange-rates?input=${inputCurrency}&end=${endCurrency}`
-                );
-                const data = await response.json();
-                setExchangeRates(data);
-            } catch (error) {
-                console.error("Error fetching exchange rates:", error);
-            }
-        };
+    useEffect(convert, [convert]);
+    if (optimalPath.length === 0) {
+        return <div>Loading...</div>;
+    }
 
-        fetchExchangeRates();
-    }, [inputCurrency, endCurrency]);
-
-    const handleInputCurrencyChange = (event) => {
+    const handleBaseChange = (event) => {
         const selectedValue = event.target.value;
-        setInputCurrency(selectedValue);
+        setBase(selectedValue);
     };
 
-    const handleEndCurrencyChange = (event) => {
+    const handleQuoteChange = (event) => {
         const selectedValue = event.target.value;
-        setEndCurrency(selectedValue);
+        setQuote(selectedValue);
+    };
+
+    const handleFeeChange = (event) => {
+        const selectedValue = event.target.value;
+        setFee(selectedValue);
     };
 
     return (
-        <div className="dashboard">
+        <div className="currency-converter">
+            <h1>Currency Converter</h1>
             <div>
                 <label>Input Currency:</label>
-                <select
-                    value={inputCurrency}
-                    onChange={handleInputCurrencyChange}
-                >
-                    {currencyOptions.map((option) => (
+                <select value={base} onChange={handleBaseChange}>
+                    {currencies.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
@@ -78,16 +79,35 @@ export default function Dashboard() {
             </div>
             <div>
                 <label>End Currency:</label>
-                <select value={endCurrency} onChange={handleEndCurrencyChange}>
-                    {currencyOptions.map((option) => (
+                <select value={quote} onChange={handleQuoteChange}>
+                    {currencies.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
                     ))}
                 </select>
             </div>
-            {/* <CurrencyExchangeRates inputCurrency={inputCurrency} endCurrency={endCurrency} exchangeRates={exchangeRates} />
-            <ChartComponent data={initialData}></ChartComponent> */}
+            {/* <div>
+                <label>Fee:</label>
+                <input type="text" value={fee} onChange={handleFeeChange} />
+            </div> */}
+            <div>
+                <div>Direct Rate: {directRate}</div>
+                <div>
+                    Optimal Rate:{" "}
+                    {optimalRate > directRate ? optimalRate : directRate}
+                </div>
+                <div>
+                    Optimal Path:{" "}
+                    {optimalRate > directRate
+                        ? optimalPath.join(" -> ")
+                        : `${base} -> ${quote}`}
+                </div>
+                <div>
+                    Difference:{" "}
+                    {optimalRate > directRate ? optimalRate - directRate : 0}
+                </div>
+            </div>
         </div>
     );
 }

@@ -1,40 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Day Night Mode</title>
-  <style>
-    body {
-      transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition */
-    }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Day Night Mode</title>
+        <style>
+            body {
+                transition:
+                    background-color 0.5s ease,
+                    color 0.5s ease; /* Smooth transition */
+            }
 
-    /* Day mode */
-    body.day {
-      background-color: #fff;
-      color: #000;
-    }
+            /* Day mode */
+            body.day {
+                background-color: #fff;
+                color: #000;
+            }
 
-    /* Night mode */
-    body.night {
-      background-color: #333;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-  <h1>Day Night Mode</h1>
-  <button id="mode-toggle">Toggle Mode</button>
+            /* Night mode */
+            body.night {
+                background-color: #333;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Day Night Mode</h1>
+        <button id="mode-toggle">Toggle Mode</button>
 
-  <script>
-    // Function to toggle between day and night modes
-    function toggleMode() {
-      const body = document.body;
-      body.classList.toggle('night'); // Toggle night mode
-    }
+        <script>
+            // Function to toggle between day and night modes
+            function toggleMode() {
+                const body = document.body;
+                body.classList.toggle("night"); // Toggle night mode
+            }
 
-    // Event listener for mode toggle button
-    document.getElementById('mode-toggle').addEventListener('click', toggleMode);
-  </script>
-</body>
+            // Event listener for mode toggle button
+            document
+                .getElementById("mode-toggle")
+                .addEventListener("click", toggleMode);
+        </script>
+    </body>
 </html>

@@ -8,6 +8,7 @@ const {
     getAllHistoricalPairs,
     getHistoricalPair,
     updateCurrencies,
+    convertCurrencies,
 } = require("../controllers/currencyController");
 // const makeApiRequest = require("./fetch");
 
@@ -37,5 +38,8 @@ router.get("/historical/:id", getHistoricalPair);
 
 // Update all currencies
 router.get("/update", updateCurrencies);
+
+// Convert currencies
+router.get("/convert/:base/:quote/:fee", convertCurrencies);
 
 module.exports = router;

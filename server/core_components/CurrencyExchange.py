@@ -1,6 +1,7 @@
 import json
 import math
 import heapq
+import sys
 
 
 class CurrencyExchange:
@@ -138,3 +139,23 @@ class CurrencyExchange:
         }
 
         return json.dumps(result)
+
+
+if __name__ == "__main__":
+    # print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sep="\n")
+    rates, src, dest, fee = (
+        json.loads(sys.argv[1]),
+        sys.argv[2],
+        sys.argv[3],
+        int(sys.argv[4]),
+    )
+    # print(rates, base, quote, fee)
+
+    # format for algo
+    formattedRates = [(pair["base"], pair["quote"], pair["rate"]) for pair in rates]
+    # print(formattedRates)
+
+    CE = CurrencyExchange(formattedRates)
+    sys.stdout.write(
+        CE.prunedBacktrackWithProportionalFee(formattedRates, src, dest, feePerUnit=fee)
+    )

@@ -3,6 +3,9 @@ require("dotenv").config();
 const format = require("pg-format");
 const Ajv = require("ajv");
 const addFormats = require("ajv-formats");
+const { spawn } = require("child_process");
+const path = require("node:path");
+const { fileURLToPath } = require("url");
 
 // init ajv json schema validator for external api
 const ajv = new Ajv();
@@ -247,6 +250,54 @@ const updateCurrencies = async (req, res) => {
     console.log(await _getApiStatus());
 };
 
+const convertCurrencies = async (req, res) => {
+    const baseCurrency = req.params.base;
+    const quoteCurrency = req.params.quote;
+    const feePerUnit = req.params.fee;
+    // console.log(baseCurrency, quoteCurrency, feePerUnit);
+    const rates = await _getAllLatestPairs();
+
+    const py = spawn("python", [
+        "./core_components/CurrencyExchange.py",
+        JSON.stringify(rates),
+        baseCurrency,
+        quoteCurrency,
+        feePerUnit,
+    ]);
+
+    py.stdout.on("data", (data) => {
+        console.log(data.toString());
+        res.status(200).json(data.toString());
+    });
+
+    py.stderr.on("data", (data) => {
+        console.error("err: ", data.toString());
+        res.status(400).json("Bad input");
+    });
+
+    py.on("error", (error) => {
+        console.error("error: ", error.message);
+        res.status(500).json("Python program crashed");
+    });
+
+    py.on("close", (code) => {
+        console.log("child process exited with code ", code);
+    });
+};
+
+// Get all pairs
+const _getAllLatestPairs = async () => {
+    const sql = `SELECT * FROM ${process.env.latest_table};`;
+
+    try {
+        const allCurrencyPairs = await pool.query(sql);
+        const content = allCurrencyPairs.rows;
+        return content;
+    } catch (error) {
+        return { error: error.message };
+    }
+};
+
 /**
  * Make GET request to fxapi/latest
  *
@@ -354,4 +405,5 @@ module.exports = {
     getAllHistoricalPairs,
     getHistoricalPair,
     updateCurrencies,
+    convertCurrencies,
 };
