@@ -1,6 +1,6 @@
 .group {
     background: #335;
-    width: 180px;
+    width: 110px;
     margin: 0 auto 20px;
     display: grid;
     grid-template-columns: 100px 80px;

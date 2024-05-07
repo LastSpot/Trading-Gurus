@@ -106,13 +106,6 @@ export default function Dashboard(props) {
         }
     }, [currencyData, curCurrency]);
 
-    // Handles error and loading state
-    if (error) return <div className="failed">failed to load</div>;
-    if (isValidating) return <div className="Loading">Loading...</div>;
-
-    console.log("historical", historicalData);
-    console.log("currency", currencyData);
-
     const chartData = currencyData
         .map((dataPoint) => ({
             time: Math.floor(
@@ -121,10 +114,7 @@ export default function Dashboard(props) {
             ),
             value: dataPoint.rate,
         }))
-        .toSorted((a, b) => {
-            if (a.time === b.time) console.log(a, b);
-            return b.time < a.time;
-        });
+        .sort((a, b) => a.time - b.time);
     // const chartData = currencyData.map((pair) =>
     //     pair
     //         .map((dataPoint) => {
@@ -136,6 +126,14 @@ export default function Dashboard(props) {
     //         .toSorted((a, b) => b.time < a.time)
     // );
     console.log("chart", chartData);
+    
+    // Handles error and loading state
+    if (error) return <div className="failed">failed to load</div>;
+    if (isValidating) return <div className="Loading">Loading...</div>;
+
+    console.log("historical", historicalData);
+    console.log("currency", currencyData);
+
 
     // TODO: when clicking on a bubble, change chart to that currency
 
