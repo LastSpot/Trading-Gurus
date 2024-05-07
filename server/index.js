@@ -1,7 +1,7 @@
 require("dotenv").config();
 
-const { currencySchema } = require('./models/currency')
-const { userSchema } = require('./models/users')
+const { currencySchema } = require("./models/currency");
+const { userSchema } = require("./models/users");
 
 const express = require("express");
 const cors = require("cors");
@@ -11,11 +11,11 @@ const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT || 3000;
 
 // Schemas initialization
-currencySchema()
-userSchema()
+currencySchema();
+userSchema();
 
 // middleware
 app.use(express.json());

@@ -10,8 +10,8 @@ const userSchema = async () => {
         );
     `;
     try {
-        await pool.query(sql)
-        console.log('Successfully initialize users table.')
+        await pool.query(sql);
+        console.log("Successfully initialize users table.");
     } catch (error) {
         console.error(error);
     }

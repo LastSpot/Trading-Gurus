@@ -5,7 +5,7 @@ const pool = new Pool({
     user: process.env.GURUS,
     password: process.env.PASSWORD,
     host: process.env.HOST,
-    port: 5432,
+    port: process.env.DB_PORT,
     database: process.env.DB,
     ssl: {
         rejectUnauthorized: false,

@@ -190,13 +190,17 @@ const updateCurrencies = async (req, res) => {
         // base currency -> all paired quote currencies
         const apiRes = await _makeApiRequest(baseCode, currencies);
         if (apiRes.status === "error") {
-            return res.status(500).json({ error: "External API request failed" });
+            return res
+                .status(500)
+                .json({ error: "External API request failed" });
         }
         const apiJson = apiRes.data;
         if (!validateApi(apiJson)) {
             console.log(apiJson);
             console.error(validateApi.errors);
-            return res.status(500).json({ error: "External API request failed" }); // Generic error for client
+            return res
+                .status(500)
+                .json({ error: "External API request failed" }); // Generic error for client
         }
 
         // get timestamp and format for sql ("2024-05-02T06:52:59Z" -> "2024-05-02 06:52:59")
@@ -314,7 +318,11 @@ const _updateLatestPair = async (code, base, quote, rate) => {
 
 // Update a pair
 const _addCurrencyPairs = async (values) => {
-    if (values == undefined || values.length === 0 || values.includes(undefined)) {
+    if (
+        values == undefined ||
+        values.length === 0 ||
+        values.includes(undefined)
+    ) {
         console.log("addCurrencyPairs bad values:", values);
         return {
             status: "error",
