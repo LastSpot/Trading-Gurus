@@ -1,5 +1,5 @@
 .group {
-    background: #335;
+    background: white;
     width: 180px;
     margin: 0 auto 20px;
     display: grid;
@@ -10,10 +10,18 @@ input,
 select {
     background: none;
     border: 0;
-    color: #fff;
+    color: black;
+    width: inherit;
+    text-align: center;
+}
+.group select:focus-within option {
+    color: black;
+}
+.group select option:selected {
+    color: white;
 }
 input {
-    padding-left: 10px;
+    padding-left: 100%;
 }
 select {
     padding: 15px;
