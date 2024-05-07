@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
 import ChartComponent from "./ChartComponent";
 import CurrencyExchangeRates from "./CurrencyExchangeRates";
-import CurrencyInput from "../currency/CurrencyInput";
+import CurrencyDropdown from "../currency/CurrencyDropdown";
 
 // EUR, USD, JPY, GBP, AUD, CAD, CHF, NZD,
 const currencies = [
-    { label: "USD - US Dollar", value: "USD" },
-    { label: "CAD - Canadian Dollar", value: "CAD" },
-    { label: "JPY - Japanese Yen", value: "JPY" },
-    { label: "GBP - British Pound", value: "GBP" },
-    { label: "EUR - Euro", value: "EUR" },
-    { label: "AUD - Australian Dollar", value: "AUD" },
-    { label: "CHF - Swiss Franc", value: "CHF" },
-    { label: "NZD - New Zealand Dollar", value: "NZD" },
+    { label: "AUDCAD", value: "AUDCAD" },
+    { label: "AUDCHF", value: "AUDCHF" },
+    { label: "AUDEUR", value: "AUDEUR" },
+    { label: "AUDGBP", value: "AUDGBP" },
+    { label: "AUDJPY", value: "AUDJPY" },
+    { label: "AUDNZD", value: "AUDNZD" },
+    { label: "AUDUSD", value: "AUDUSD" },
+    { label: "CADCHF", value: "CADCHF" },
+    { label: "CADEUR", value: "CADEUR" },
+    { label: "CADGBP", value: "CADGBP" },
+    { label: "CADJPY", value: "CADJPY" },
+    { label: "CADNZD", value: "CADNZD" },
+    { label: "CADUSD", value: "CADUSD" },
+    { label: "CHFEUR", value: "CHFEUR" },
+    { label: "CHFGBP", value: "CHFGBP" },
+    { label: "CHFJPY", value: "CHFJPY" },
+    { label: "CHFNZD", value: "CHFNZD" },
+    { label: "CHFUSD", value: "CHFUSD" },
+    { label: "EURGBP", value: "EURGBP" },
+    { label: "EURJPY", value: "EURJPY" },
+    { label: "EURNZD", value: "EURNZD" },
+    { label: "EURUSD", value: "EURUSD" },
+    { label: "GBPJPY", value: "GBPJPY" },
+    { label: "GBPNZD", value: "GBPNZD" },
+    { label: "GBPUSD", value: "GBPUSD" },
+    { label: "JPYNZD", value: "JPYNZD" },
+    { label: "JPYUSD", value: "JPYUSD" },
+    { label: "NZDUSD", value: "NZDUSD" },
 ];
 
 /**
@@ -31,8 +51,6 @@ export default function Dashboard(props) {
     const [currencyData, setCurrencyData] = useState([]);
     const [inputCurrency, setInputCurrency] = useState(currencies[0].value);
     const [outputCurrency, setOutputCurrency] = useState(currencies[1].value);
-    const [inputAmount, setInputAmount] = useState(1);
-    const [outputAmount, setOutputAmount] = useState(1);
     const [chartIdx, setChartIdx] = useState(0); // TODO: user can change chart
 
     // data: [{code, base, quote, rate, rate_timestamp}]
@@ -82,23 +100,12 @@ export default function Dashboard(props) {
     return (
         <div>
             <div>
-                <label>Input Currency:</label>
-                <CurrencyInput
-                    amount={inputAmount}
+                <label>Exchange Pairs:</label>
+                {/* TODO: Make this a checkbox dropdown so it matches currency bubbles */}
+                <CurrencyDropdown
                     currency={inputCurrency}
                     currencies={currencies.map((option) => option.value)}
-                    onAmountChange={setInputAmount}
                     onCurrencyChange={setInputCurrency}
-                />
-            </div>
-            <div>
-                <label>Output Currency:</label>
-                <CurrencyInput
-                    amount={outputAmount}
-                    currency={outputCurrency}
-                    currencies={currencies.map((option) => option.value)}
-                    onAmountChange={setOutputAmount}
-                    onCurrencyChange={setOutputCurrency}
                 />
             </div>
             <CurrencyExchangeRates exchanges={exchanges} />
