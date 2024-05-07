@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles.css";
 import useSWR from "swr";
-// require("dotenv").config();
+// import "dotenv/config";
 
 const CurrencyBubble = ({ currencyPair, rate }) => (
     <div className="currency-bubble">
@@ -12,13 +12,13 @@ const CurrencyBubble = ({ currencyPair, rate }) => (
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const CurrencyExchangeRates = () => {
+const CurrencyExchangeRates = ({exchanges}) => {
     const {
         // data: (code, base, quote, rate)
         data: currencyData,
         error,
         isValidating,
-    } = useSWR(`http://localhost:8000/currency`, fetcher);
+    } = useSWR(`/currency`, fetcher);
 
     // Handles error and loading state
     if (error) return <div className="failed">failed to load</div>;
