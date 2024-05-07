@@ -1,6 +1,4 @@
 import useSWR from "swr";
 
 // subscriber
-const CurrencySynchronizer = () => {
-
-}
+const CurrencySynchronizer = () => {};

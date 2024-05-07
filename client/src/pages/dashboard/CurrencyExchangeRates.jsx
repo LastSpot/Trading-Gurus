@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles.css";
 import useSWR from "swr";
-// import "dotenv/config";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 
 const CurrencyBubble = ({ currencyPair, rate }) => (
     <div className="currency-bubble">
         <p>{currencyPair} </p>
-        <p>{rate} USD</p>
+        <p>
+            {rate} {currencyPair.substring(3)}
+        </p>
     </div>
 );
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const CurrencyExchangeRates = ({exchanges}) => {
+/**
+ *
+ * @param {string[]} props.exchanges currency code e.g. "USDEUR"
+ * @returns
+ */
+const CurrencyExchangeRates = ({ exchanges }) => {
+    const [curBubble, setCurBubble] = useState("");
     const {
         // data: (code, base, quote, rate)
-        data: currencyData,
+        data: latestData,
         error,
         isValidating,
     } = useSWR(`/currency`, fetcher);
@@ -24,17 +34,20 @@ const CurrencyExchangeRates = ({exchanges}) => {
     if (error) return <div className="failed">failed to load</div>;
     if (isValidating) return <div className="Loading">Loading...</div>;
 
+    // filter desired exchanges
+    const currencyPairs = latestData.filter((pair) =>
+        exchanges.includes(pair.code)
+    );
+
     // Sort data object by exchange rate (highest to lowest)
-    const sortedData = Object.values(currencyData).sort((a, b) => b[3] - a[3]);
+    // const sortedData = Object.values(latestData).sort((a, b) => b[3] - a[3]);
 
     // Select the top 5 currency pairs
-    const topFive = sortedData.slice(0, 5);
-    // console.log(topFive);
+    // const topFive = sortedData.slice(0, 5);
 
-    const currencyPairs = topFive.map(
-        (pair) => `${pair.base} to ${pair.quote}`
-    );
-    // console.log(currencyPairs);
+    // const currencyPairs = currencyData.map(
+    //     (pair) => `${pair.base} to ${pair.quote}`
+    // );
 
     return (
         <div className="currency-exchange-rates">
@@ -43,11 +56,11 @@ const CurrencyExchangeRates = ({exchanges}) => {
                 className="currency-exchange-rates"
                 style={{ display: "flex" }}
             >
-                {currencyPairs.map((currencyPair, index) => (
+                {currencyPairs.map((pair, index) => (
                     <CurrencyBubble
                         key={index}
-                        currencyPair={currencyPair}
-                        rate={topFive[index].rate}
+                        currencyPair={pair.code}
+                        rate={pair.rate}
                     />
                 ))}
             </div>
