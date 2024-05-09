@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import CurrencyInput from "./CurrencyInput";
+import "../../styles.css";
 
 const currencies = [
     { label: "EUR - Euro", value: "EUR" },
@@ -24,7 +25,7 @@ export default function ConvertCurrency() {
     // also changing fee is buggy
     const convert = useCallback(() => {
         Promise.all([
-            fetch(`/currency/convert/${base}/${quote}/${fee}`),
+            fetch(`/currency/convert/${base}/${quote}/${fee / 100000}`),
             fetch("/currency"),
         ])
             .then((res) => Promise.all(res.map((prom) => prom.json())))
@@ -87,11 +88,11 @@ export default function ConvertCurrency() {
                     ))}
                 </select>
             </div>
-            {/* <div>
-                <label>Fee:</label>
-                <input type="text" value={fee} onChange={handleFeeChange} />
-            </div> */}
             <div>
+                <label>Fee ($USD/100,000 units):</label>
+                <input type="text" value={fee} onChange={handleFeeChange} />
+            </div>
+            <div className="converted-output">
                 <div>Direct Rate: {directRate}</div>
                 <div>
                     Optimal Rate:{" "}

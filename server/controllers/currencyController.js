@@ -253,11 +253,12 @@ const updateCurrencies = async (req, res) => {
 const convertCurrencies = async (req, res) => {
     const baseCurrency = req.params.base;
     const quoteCurrency = req.params.quote;
-    const feePerUnit = req.params.fee;
+    const feePerUnit = Number(req.params.fee);
+    console.log(feePerUnit, typeof feePerUnit);
     // console.log(baseCurrency, quoteCurrency, feePerUnit);
     const rates = await _getAllLatestPairs();
 
-    const py = spawn("python", [
+    const py = spawn("python3", [
         "./core_components/CurrencyExchange.py",
         JSON.stringify(rates),
         baseCurrency,

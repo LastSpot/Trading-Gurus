@@ -106,13 +106,6 @@ export default function Dashboard(props) {
         }
     }, [currencyData, curCurrency]);
 
-    // Handles error and loading state
-    if (error) return <div className="failed">failed to load</div>;
-    if (isValidating) return <div className="Loading">Loading...</div>;
-
-    console.log("historical", historicalData);
-    console.log("currency", currencyData);
-
     const chartData = currencyData
         .map((dataPoint) => ({
             time: Math.floor(
@@ -134,6 +127,16 @@ export default function Dashboard(props) {
     // );
     console.log("chart", chartData);
 
+    if (chartData.length === 0)
+        return <div className="Loading">Loading...</div>;
+
+    // Handles error and loading state
+    if (error) return <div className="failed">failed to load</div>;
+    if (isValidating) return <div className="Loading">Loading...</div>;
+
+    console.log("historical", historicalData);
+    console.log("currency", currencyData);
+
     // TODO: when clicking on a bubble, change chart to that currency
 
     return (
@@ -149,7 +152,10 @@ export default function Dashboard(props) {
             </div>
             <CurrencyExchangeRates exchanges={exchanges} />
             <div>
-                <h2>{curCurrency}: </h2>
+                <h2>
+                    {curCurrency}: {chartData[chartData.length - 1].value}{" "}
+                    {curCurrency.substring(3)}
+                </h2>
             </div>
             <ChartComponent data={chartData}></ChartComponent>
         </div>

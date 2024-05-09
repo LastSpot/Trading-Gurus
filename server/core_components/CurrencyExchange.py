@@ -147,7 +147,7 @@ if __name__ == "__main__":
         json.loads(sys.argv[1]),
         sys.argv[2],
         sys.argv[3],
-        int(sys.argv[4]),
+        float(sys.argv[4]),
     )
     # print(rates, base, quote, fee)
 
