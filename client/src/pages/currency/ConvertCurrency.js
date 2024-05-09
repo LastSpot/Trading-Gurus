@@ -67,7 +67,7 @@ export default function ConvertCurrency() {
     return (
         <div className="currency-converter">
             <h1>Currency Converter</h1>
-            <div>
+            <div className="convertor">
                 <label>Input Currency:</label>
                 <select value={base} onChange={handleBaseChange}>
                     {currencies.map((option) => (
