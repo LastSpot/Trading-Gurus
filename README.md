@@ -1,20 +1,46 @@
-# CS_520_final
+# Trading Gurus
 
-npm start
-Starts the development server.
+Group Member: Michael Le, Long Vo, John Le, Toan Tran, Aalya Vora
 
-npm run build
-Bundles the app into static files for production.
+## Introduction
+Optimal Currency Exchange Path Finder
 
-npm test
-Starts the test runner.
+A web app that helps users find the most cost-effective route to exchange currencies. By leveraging real-time exchange rates and advanced algorithms, it identifies alternative multi-currency conversion paths that may yield better overall rates than direct exchanges.
 
-npm run eject
-Removes this tool and copies build dependencies, configuration files and scripts into the app directory. If you do this, you can’t go back!
+## How It Works
 
-We suggest that you begin by typing:
+1. User inputs start currency (A) and desired currency (B)
+2. Calculates direct A → B exchange rate
+3. Explores all possible paths like A → C → … → D → B
+4. Identifies optimal path with best overall rate
+5. Presents user with optimal path and potential savings
 
-cd client
-npm start
+## Purpose
 
-Happy hacking!
+1. Save money on currency exchanges/make the most money
+2. Make informed decisions with real-time data
+3. User-friendly interface and streamlined process
+
+## Installation Guide
+
+Begin by installing all node modules require:
+
+    npm install 
+
+Ensure to have a Python compiler. Can be found and install through here: https://www.python.org/downloads/
+
+Start frontend:
+
+    cd client
+    npm start
+
+Start backend:
+
+    cd server
+    npm start (or npm run dev)
+
+### Note: start backend before the frontend to ensure the web is running smoothly
+
+## Database
+
+We used AWS RDS for our database. Our data is stored inside PostgreSQL runs by AWS RDS.
