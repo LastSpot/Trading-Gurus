@@ -1,8 +1,11 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
-const verifyToken = (token) => {
-    if (process.env.JWT_SECRET == token) {
-        return res.status(200).json({verify: true});
+const verifyToken = (signature) => {
+    try {
+        const decode = jwt.verify(process.env.JWT_SECRET);
+        return {'verify': true};
+    } catch (error) {
+        return {'verify': false};
     }
-    res.status(400).json({Error: 'Mismatch token'});
 };
