@@ -20,8 +20,10 @@
     color: white;
 }
 input {
-    padding-left: 100%;
+    margin: 10px;
+    padding: 10px;
 }
 select {
-    padding: 15px;
+    margin: 10px;
+    padding: 10px;
 }
