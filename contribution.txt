@@ -1,0 +1,4 @@
+Front-end: Long Vo, John Le
+Back-end: Michael Le
+Currency-exchange python: Toan Tran
+Integration: Aalya
